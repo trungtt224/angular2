@@ -1,8 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import {Http, Headers}   from '@angular/http';
 
 export class Hero {
   id: number;
   name: string;
+}
+
+export class Weather {
+  coord : string;
 }
 
 @Component({
@@ -14,16 +19,43 @@ export class Hero {
     <div>
       <label>name: </label>
       <input [(ngModel)]="hero.name" placeholder="name">
+      <button (click)="getWeather()">New minor version</button>
     </div>
     `
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
+  
+  constructor(public http: Http) {
+
+  }
+
   title = 'Tour of Heroes';
+
   hero: Hero = {
     id: 1,
     name: 'Windstorm'
   };
+
+
+  ngOnInit(): void {
+    this.http.get('http://api.openweathermap.org/data/2.5/weather?q=London,uk&appid=44fc2c94262ae0e48939e947a1032cea')
+    .subscribe(
+      response => console.log(response.json().coord),
+      err => console.log(err),
+      () => console.log('Random Quote Complete')
+    );
+  }
+
+  getWeather() {
+    this.http.get('http://api.openweathermap.org/data/2.5/weather?q=London,uk&appid=44fc2c94262ae0e48939e947a1032cea')
+    .subscribe(
+      data => console.log(data),
+      err => console.log(err),
+      () => console.log('Random Quote Complete')
+    );
+  }
 }
+
 
 
 /*
